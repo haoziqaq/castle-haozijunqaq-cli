@@ -8,7 +8,11 @@ const chalk = require('chalk'); //文字上色
 const spinner = ora();
 
 const downloadUtils = (name, dist) => {
-    if (!dist) dist = name.split('/')[1];
+    if (!dist) {
+        dist = name.split('/')[1];
+    } else {
+        dist = dist + '/' + name.split('/')[1]
+    }
     spinner.start('开始导出源码');
     download(name, dist, (err) => {
         if (err) {
@@ -32,7 +36,7 @@ const shell = (command) => {
     }));
 };
 
-program.version('1.0.3', '-v, --version')
+program.version('1.0.7', '-v, --version')
     .command('install')
     .action(r => {
         inquirer.prompt([
