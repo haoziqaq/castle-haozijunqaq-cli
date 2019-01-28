@@ -7,6 +7,35 @@ const inquirer = require('inquirer'); //交互
 const chalk = require('chalk'); //文字上色
 const spinner = ora();
 
+const installCollection = [
+    {
+        type: 'list',
+        message: '请选择一种工具:',
+        name: 'util',
+        choices: [
+            "castle-haozijunqaq-utils",
+            "castle-haozijunqaq-wx-utils",
+        ],
+    }
+];
+
+const ejectCollection = [
+    {
+        type: 'list',
+        message: '请选择一种工具:',
+        name: 'util',
+        choices: [
+            "castle-haozijunqaq-utils",
+            "castle-haozijunqaq-wx-utils",
+        ],
+    },
+    {
+        type: 'input',
+        message: '请输入导出的相对路径 如 test/dist',
+        name: 'dist'
+    }
+];
+
 const downloadUtils = (name, dist) => {
     if (!dist) {
         dist = name.split('/')[1];
@@ -36,22 +65,16 @@ const shell = (command) => {
     }));
 };
 
-program.version('1.0.7', '-v, --version')
+program.version('1.0.8', '-v, --version')
     .command('install')
     .action(r => {
-        inquirer.prompt([
-            {
-                type: 'list',
-                message: '请选择一种工具:',
-                name: 'util',
-                choices: [
-                    "castle-haozijunqaq-utils",
-                ],
-            }
-        ]).then((result) => {
+        inquirer.prompt(installCollection).then((result) => {
             switch (result.util) {
                 case 'castle-haozijunqaq-utils':
                     shell('npm i castle-haozijunqaq-utils -S');
+                    break;
+                case 'castle-haozijunqaq-wx-utils':
+                    shell('npm i castle-haozijunqaq-wx-utils -S');
                     break;
                 default:
                     spinner.fail(chalk.red('操作异常'));
@@ -61,25 +84,15 @@ program.version('1.0.7', '-v, --version')
 
 program.command('eject')
     .action((r) => {
-        inquirer.prompt([
-            {
-                type: 'list',
-                message: '请选择一种工具:',
-                name: 'util',
-                choices: [
-                    "castle-haozijunqaq-utils",
-                ],
-            },
-            {
-                type: 'input',
-                message: '请输入导出的相对路径 如 test/dist',
-                name: 'dist'
-            }
-        ]).then((result) => {
+        inquirer.prompt(ejectCollection).then((result) => {
             switch (result.util) {
                 case 'castle-haozijunqaq-utils':
                     downloadUtils('haoziqaq/castle-haozijunqaq-utils', result.dist);
                     shell('npm i castle-haozijunqaq-utils -S');
+                    break;
+                case 'castle-haozijunqaq-wx-utils':
+                    downloadUtils('haoziqaq/castle-haozijunqaq-wx-utils', result.dist);
+                    shell('npm i castle-haozijunqaq-wx-utils -S');
                     break;
                 default:
                     spinner.fail(chalk.red('操作异常'));
